@@ -46,10 +46,18 @@ def extract_reference_seq(ref_isolate_name, alignment):
 
 
 def distance_from_reference(seq, ref_seq):
+    # Disregards sites with gaps
     assert len(seq) == len(ref_seq)
+
+    # Number of sites with gaps or ambiguities in one sequence or the other
+    invalid_sites = [i for i in range(len(seq)) if seq[i] in {'-','X'} or ref_seq[i] in {'-','X'}]
+
     diff_sites = [i for i in range(len(seq)) if seq[i] != ref_seq[i]]
 
-    distance = float(len(diff_sites)) / len(seq)
+    diff_sites = [site for site in diff_sites if site not in invalid_sites]
+
+
+    distance = float(len(diff_sites)) / (len(seq) - len(invalid_sites))
     return distance
 
 def main(argv):

@@ -2,5 +2,6 @@ results
 *.out
 *.err
 data
+figures
 ._*
 .DS_Store?
