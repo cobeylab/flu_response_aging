@@ -10,4 +10,4 @@
 
 module load mafft/7.310
 
-mafft --thread -8 ../../data/sequences/gisaid_H3N2_HA.fasta > ../../results/alignments/gisaid_H3N2_HA_alignment.fasta
+mafft --thread -8 --op 5 ../../data/sequences/gisaid_H3N2_HA.fasta > ../../results/alignments/gisaid_H3N2_HA_alignment.fasta
