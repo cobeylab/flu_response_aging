@@ -1,0 +1,6 @@
+results
+*.out
+*.err
+data
+._*
+.DS_Store?
