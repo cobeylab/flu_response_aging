@@ -19,7 +19,8 @@ H3N2_plot <- ggplot(divergence_results, aes(x = year, y = distance_from_referenc
   xlab('Year') +
   ylab('Amino acid divergence from\nA/Hong Kong/1-5/1968') +
   scale_color_brewer(type = 'qual') +
-  theme(legend.position = 'top')
+  theme(legend.position = 'top') + 
+  ggtitle('A/H3N2')
   
 # ggsave crashing for some reason
 pdf('../figures/H3N2_divergence_vs_time.pdf', width = 8, height = 6)

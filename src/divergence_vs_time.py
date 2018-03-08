@@ -10,11 +10,13 @@ import sys
 
 
 def extract_year(seq_id):
-    date = re.search(r'\|[0-9]*\/[0-9]*\/[0-9]*', seq_id).group()
-    date = date.replace('|','')
-    year = date.split('/')[0]
-    assert len(year) == 4
-
+    if seq_id.find('unknown') == -1:
+        date = re.search(r'\|[0-9]*\/[0-9]*\/[0-9]*', seq_id).group()
+        date = date.replace('|','')
+        year = date.split('/')[0]
+        assert len(year) == 4
+    else:
+        year = 'NA'
     return (year)
 
 def has_frameshift(seq):
@@ -29,6 +31,7 @@ def has_frameshift(seq):
 
     return frameshift
 
+
 def extract_reference_seq(ref_isolate_name, alignment):
     # Find index of SeqRecord that contains the reference sequence id in its label
     matching_records = []
@@ -40,9 +43,12 @@ def extract_reference_seq(ref_isolate_name, alignment):
     assert len(matching_records) < 2, 'Multiple occurrences of reference isolate found in alignment'
     ref_record  = matching_records[0]
 
-    assert has_frameshift(str(ref_record.seq)) == False, 'Reference sequence has a frameshift mutation'
+    # Convert gaps to 'n' to avoid conflict will biopython -- will be translated as X and ignored anyway
+    ref_seq = Seq(str(ref_record.seq).replace('-','n'), SingleLetterAlphabet())
 
-    return str(ref_record.seq.translate())
+    assert has_frameshift(str(ref_seq)) == False, 'Reference sequence has a frameshift mutation'
+
+    return str(ref_seq.translate())
 
 
 def distance_from_reference(seq, ref_seq):
@@ -73,6 +79,7 @@ def main(argv):
         output_file.write('isolate_id,year,distance_from_reference\n')
 
         alignment = AlignIO.read(alignment_file, 'fasta')
+
 
         ref_seq = extract_reference_seq(ref_isolate_name, alignment)
 
