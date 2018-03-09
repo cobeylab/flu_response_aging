@@ -18,9 +18,9 @@ H1N1_NA_genbank_results <- as_tibble(read.csv('../results/genbank_H1N1_NA_distan
 H1N1_NP_genbank_results <- as_tibble(read.csv('../results/genbank_H1N1_NP_distances.csv', header= T))
 
 # Filter H1N1 to keep only sequences from 1934 on (year of the reference sequence)
-H1N1_HA_genbank_results <- filter(H1N1_HA_genbank_results, year >= 1934)
-H1N1_NA_genbank_results <- filter(H1N1_NA_genbank_results, year >= 1934)
-H1N1_NP_genbank_results <- filter(H1N1_NP_genbank_results, year >= 1934)
+H1N1_HA_genbank_results <- filter(H1N1_HA_genbank_results, year >= 1977)
+H1N1_NA_genbank_results <- filter(H1N1_NA_genbank_results, year >= 1977)
+H1N1_NP_genbank_results <- filter(H1N1_NP_genbank_results, year >= 1977)
 
 # Merge tibbles
 divergence_results <- bind_rows(mutate(H3N2_HA_genbank_results, subtype = 'H3N2', segment = 'HA', database = 'genbank'),
@@ -29,7 +29,9 @@ divergence_results <- bind_rows(mutate(H3N2_HA_genbank_results, subtype = 'H3N2'
                                 mutate(H1N1_HA_genbank_results, subtype = 'H1N1', segment = 'HA', database = 'genbank'),
                                 mutate(H1N1_NA_genbank_results, subtype = 'H1N1', segment = 'NA', database = 'genbank'),
                                 mutate(H1N1_NP_genbank_results, subtype = 'H1N1', segment = 'NP', database = 'genbank')
-                                )
+                                ) %>% 
+  mutate(subtype = factor(subtype, levels = c('H3N2','H1N1'))
+         )
 
 divergence_vs_time_plot <- ggplot(divergence_results, aes(x = year, y = distance_from_reference, 
                                color = segment, label = isolate_id)) + 
@@ -39,8 +41,9 @@ divergence_vs_time_plot <- ggplot(divergence_results, aes(x = year, y = distance
   xlab('Year') +
   ylab('Amino acid divergence from reference strain') +
   scale_color_brewer(type = 'qual') +
-  theme(legend.position = 'top')
+  theme(legend.position = 'top') 
   
+
 # ggsave crashing for some reason
 pdf('../figures/divergence_vs_time_plot.pdf', width = 10, height = 6)
 plot(divergence_vs_time_plot)

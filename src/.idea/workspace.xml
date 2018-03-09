@@ -21,13 +21,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="divergence_vs_time.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="divergence_vs_time.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/divergence_vs_time.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+            <state relative-caret-position="150">
+              <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
               <folding>
                 <element signature="e#19#42#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="partition_B_sequences.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/partition_B_sequences.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding>
+                <element signature="e#266#276#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -36,7 +48,7 @@
       <file leaf-file-name="annotate_tree.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../isotype_phylogenetics/src/annotate_tree.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
+            <state relative-caret-position="720">
               <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="53" selection-end-column="20" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -58,6 +70,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/divergence_vs_time.py" />
+        <option value="$PROJECT_DIR$/partition_B_sequences.py" />
       </list>
     </option>
   </component>
@@ -91,8 +104,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -113,6 +124,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -304,6 +317,26 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/divergence_vs_time.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#19#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../isotype_phylogenetics/src/annotate_tree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="53" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/divergence_vs_time.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
           <folding>
@@ -316,7 +349,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -334,13 +366,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-125">
           <caret line="2891" column="30" selection-start-line="2891" selection-start-column="30" selection-end-line="2891" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../../isotype_phylogenetics/src/annotate_tree.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
+        <state relative-caret-position="720">
           <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="53" selection-end-column="20" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -350,10 +381,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/divergence_vs_time.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+        <state relative-caret-position="150">
+          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
           <folding>
             <element signature="e#19#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/partition_B_sequences.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="e#266#276#0" expanded="true" />
           </folding>
         </state>
       </provider>
