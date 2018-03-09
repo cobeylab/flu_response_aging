@@ -31,7 +31,6 @@ def has_frameshift(seq):
 
     return frameshift
 
-
 def extract_reference_seq(ref_isolate_name, alignment):
     # Find index of SeqRecord that contains the reference sequence id in its label
     matching_records = []
