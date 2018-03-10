@@ -1,20 +1,19 @@
 #!/usr/bin/python
-
 from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.Alphabet import SingleLetterAlphabet
 import re
 import sys
 
-#alignment_file_path = '../results/alignments/KC_alignments/H3N2_HA_genbank_alignment.fasta'
-
-
 def extract_year(seq_id):
     if seq_id.find('unknown') == -1:
         date = re.search(r'\|[0-9]*\/[0-9]*\/[0-9]*', seq_id).group()
         date = date.replace('|','')
         year = date.split('/')[0]
-        assert len(year) == 4
+        if len(year) == 0:
+            year = 'NA'
+        else:
+            assert len(year) == 4
     else:
         year = 'NA'
     return (year)
@@ -39,15 +38,38 @@ def extract_reference_seq(ref_isolate_name, alignment):
         if isolate_name == ref_isolate_name:
             matching_records.append(record)
     assert len(matching_records) != 0, 'Reference isolate not found in alignment'
-    assert len(matching_records) < 2, 'Multiple occurrences of reference isolate found in alignment'
-    ref_record  = matching_records[0]
 
-    # Convert gaps to 'n' to avoid conflict will biopython -- will be translated as X and ignored anyway
-    ref_seq = Seq(str(ref_record.seq).replace('-','n'), SingleLetterAlphabet())
+    assert len(matching_records) < 3, 'More than two occurrences of reference isolate found in alignment'
 
-    assert has_frameshift(str(ref_seq)) == False, 'Reference sequence has a frameshift mutation'
+    # If reference strain is duplicated in the alignment, check that the sequences are identical at the A.A. level
+    if len(matching_records) == 2:
+        ref_record_1 = matching_records[0]
+        ref_record_2 = matching_records[1]
 
-    return str(ref_seq.translate())
+        # Convert gaps to 'n' to avoid conflict with biopython -- will be translated as X and ignored anyway
+        ref_seq_1 = Seq(str(ref_record_1.seq).replace('-','n'), SingleLetterAlphabet())
+        ref_seq_2 = Seq(str(ref_record_2.seq).replace('-','n'), SingleLetterAlphabet())
+
+        assert has_frameshift(str(ref_seq_1)) == False and has_frameshift(str(ref_seq_2)) == False, 'Duplicate reference sequences have a frameshift mutation'
+
+        ref_seq_1 = str(ref_seq_1.translate())
+        ref_seq_2 = str(ref_seq_2.translate())
+
+        n_diffs = len([i for i in range(len(ref_seq_1)) if ref_seq_1[i] != ref_seq_2[i]])
+
+        ref_seq = ref_seq_1
+
+        if n_diffs >0:
+            print 'Warning: there are duplicate reference sequences differing by ' + str(n_diffs) + ' amino acids. Choosing first listed.'
+
+    elif len(matching_records) == 1:
+        ref_record = matching_records[0]
+        # Convert gaps to 'n' to avoid conflict with biopython -- will be translated as X and ignored anyway
+        ref_seq = Seq(str(ref_record.seq).replace('-','n'), SingleLetterAlphabet())
+        assert has_frameshift(str(ref_seq)) == False, 'Reference sequence has a frameshift mutation'
+        ref_seq = str(ref_seq.translate())
+
+    return ref_seq
 
 
 def distance_from_reference(seq, ref_seq):
