@@ -54,21 +54,89 @@ divergence_results <- bind_rows(mutate(H3N2_HA_genbank_results, subtype = 'H3N2'
   mutate(subtype = factor(subtype, levels = c('H3N2','H1N1', 'B/Victoria','B/Yamagata'))
          )
 
-divergence_vs_time_plot <- ggplot(divergence_results, aes(x = year, y = distance_from_reference, 
-                               color = segment, label = isolate_id)) + 
-  geom_point(alpha = 0.5, size = 1) + 
-  geom_smooth(se = F) +
+### AMINO ACID DIVERGENCE VS. TIME PLOT ###
+
+divergence_vs_time_plot <- ggplot(divergence_results, aes(x = year, y = distance_from_reference)) + 
+  geom_point(alpha = 0.5, size = 1.5, shape = 21, 
+             aes(fill = segment, colour = segment), stroke = 0.1) + 
+  #geom_smooth(se = F, aes(colour = segment)) +
   facet_grid(.~subtype, scales = 'free_x') +
   xlab('Year') +
   ylab('Amino acid divergence\nfrom reference strain') +
-  scale_color_brewer(type = 'qual') +
-  theme(legend.position = c(0.003,0.8),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 10),
-        axis.text.x = element_text(size = 10)) 
-  
+  scale_fill_brewer(type = 'qual') +
+  scale_color_manual(values = c('springgreen4','darkorchid3','chocolate1')) +
+theme(legend.position = c(0.003,0.78),
+      legend.title = element_text(size = 10),
+      legend.text = element_text(size = 10),
+      axis.text.x = element_text(size = 10)) 
 
+# Extract values from geom_point (to be able to ommit spline over gaps in the data)
+divergence_spline_values <- ggplot_build(ggplot(divergence_results, aes(x = year, y = distance_from_reference)) +
+  geom_smooth(se = F, aes(colour = segment)) + facet_grid(.~subtype))[[1]][[1]]
+
+divergence_spline_values <- as_tibble(divergence_spline_values) %>%
+  rename(year = x, spline_fit = y, subtype = PANEL, segment = group) %>%
+  mutate(subtype = ifelse(subtype == '1', 'H3N2', subtype)) %>%
+  mutate(subtype = ifelse(subtype == '2', 'H1N1', subtype)) %>%
+  mutate(subtype = ifelse(subtype == '3', 'B/Victoria', subtype)) %>%
+  mutate(subtype = ifelse(subtype == '4', 'B/Yamagata', subtype)) %>%
+  mutate(subtype = factor(subtype, levels = c('H3N2','H1N1', 'B/Victoria','B/Yamagata'))) %>%
+  mutate(segment = ifelse(segment == '1', 'HA', segment)) %>%
+  mutate(segment = ifelse(segment == '2', 'NA', segment)) %>%
+  mutate(segment = ifelse(segment == '3', 'NP', segment)) %>%
+  mutate(segment = factor(segment, levels = c('HA','NA','NP')) )%>%
+  mutate(spline_fit = ifelse(subtype == 'H1N1' & year >1957 & year <1977,
+                             NA, spline_fit))
+
+divergence_vs_time_plot <- divergence_vs_time_plot +
+  geom_line(data = divergence_spline_values,aes(y = spline_fit,x = year,
+                                                color = factor(segment)))
+  
 # ggsave crashing for some reason
 pdf('../figures/divergence_vs_time_plot.pdf', height = 3, width = 10)
 plot(divergence_vs_time_plot)
+dev.off()
+
+### PLOT WITH FRACTION OF GLYCOSYLATION SITES OVER TIME RELATIVE TO REFERENCE STRAIN ##
+glyc_vs_time_plot <- ggplot(divergence_results, aes(x = year, y = fraction_glyc_seq - fraction_glyc_ref , 
+                                                    color = segment)) + 
+  geom_point(alpha = 0.5, size = 1.5, shape = 21, 
+             aes(fill = segment, colour = segment), stroke = 0.1) + 
+  #geom_smooth(se = F, aes(colour = segment)) +
+  facet_grid(.~subtype, scales = 'free_x') +
+  xlab('Year') +
+  ylab('Change in fraction of\npotentially glycosylated sites') +
+  scale_fill_brewer(type = 'qual') +
+  scale_color_manual(values = c('springgreen4','darkorchid3','chocolate1')) +
+  theme(legend.position = c(0.003,0.78),
+        legend.title = element_text(size = 10),
+        legend.text = element_text(size = 10),
+        axis.text.x = element_text(size = 10)) 
+
+# Extract values from geom_point (to be able to ommit spline over gaps in the data)
+glycosylation_spline_values <- ggplot_build(ggplot(divergence_results, aes(x = year, y = fraction_glyc_seq - fraction_glyc_ref)) +
+                                           geom_smooth(se = F, aes(colour = segment)) + facet_grid(.~subtype))[[1]][[1]]
+
+glycosylation_spline_values <- as_tibble(glycosylation_spline_values) %>%
+  rename(year = x, spline_fit = y, subtype = PANEL, segment = group) %>%
+  mutate(subtype = ifelse(subtype == '1', 'H3N2', subtype)) %>%
+  mutate(subtype = ifelse(subtype == '2', 'H1N1', subtype)) %>%
+  mutate(subtype = ifelse(subtype == '3', 'B/Victoria', subtype)) %>%
+  mutate(subtype = ifelse(subtype == '4', 'B/Yamagata', subtype)) %>%
+  mutate(subtype = factor(subtype, levels = c('H3N2','H1N1', 'B/Victoria','B/Yamagata'))) %>%
+  mutate(segment = ifelse(segment == '1', 'HA', segment)) %>%
+  mutate(segment = ifelse(segment == '2', 'NA', segment)) %>%
+  mutate(segment = ifelse(segment == '3', 'NP', segment)) %>%
+  mutate(segment = factor(segment, levels = c('HA','NA','NP')) )%>%
+  mutate(spline_fit = ifelse(subtype == 'H1N1' & year >1957 & year <1977,
+                             NA, spline_fit))
+
+glyc_vs_time_plot <- glyc_vs_time_plot +
+  geom_line(data = glycosylation_spline_values,aes(y = spline_fit,x = year,
+                                                color = factor(segment)))
+
+
+# ggsave crashing for some reason
+pdf('../figures/new_glycosylation_sites_vs_time_plot.pdf', height = 3, width = 10)
+plot(glyc_vs_time_plot)
 dev.off()
