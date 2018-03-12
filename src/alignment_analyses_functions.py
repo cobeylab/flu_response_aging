@@ -69,23 +69,32 @@ def extract_reference_seq(ref_isolate_name, alignment):
     return ref_seq
 
 
-def distance_from_reference(seq, ref_seq):
-    # Disregards sites with gaps
+def distance_from_reference(seq, ref_seq, sites):
+    """
+    :param seq: string with query amino acid sequence
+    :param ref_seq: string with reference amino acid sequence
+    :param sites: list of sites (in python indexing) to be considered
+    :return: amino acid divergence between query and ref. seqs. (n diffs. / number of sites excluding gaps and ambiguities)
+    """
+
     assert len(seq) == len(ref_seq)
 
     # Number of sites with gaps or ambiguities in one sequence or the other
-    invalid_sites = [i for i in range(len(seq)) if seq[i] in {'-','X'} or ref_seq[i] in {'-','X'}]
+    invalid_sites = [i for i in sites if seq[i] in {'-','X'} or ref_seq[i] in {'-','X'}]
 
     # Number of sites that are different between sequence and reference sequence
-    diff_sites = [i for i in range(len(seq)) if seq[i] != ref_seq[i]]
+    diff_sites = [i for i in sites if seq[i] != ref_seq[i]]
 
     # Exclude invalid sites (with gaps or ambiguities)
     diff_sites = [site for site in diff_sites if site not in invalid_sites]
 
     # Normalize difference by length of sequence excluding invalid sites
-    distance = float(len(diff_sites)) / (len(seq) - len(invalid_sites))
+    distance = float(len(diff_sites)) / (len(sites) - len(invalid_sites))
 
     return distance
+
+assert(distance_from_reference('MAANRSCNASCNPSC','MXANPSCDAS-NPSA', sites = range(15)) == float(3)/13)
+assert(distance_from_reference('MAANRSCNASCNPSC','MXANPSCDAS-NPSA', sites = [0,1,4]) == float(1)/2)
 
 def fraction_sites_glycosylated(seq):
     """
@@ -111,6 +120,7 @@ def fraction_sites_glycosylated(seq):
     # Fraction of sites glycosylated (denominator excludes gaps and ambiguous amino acids)
     fraction_glyc = float(glycount) / (len(seq) - n_invalid_sites)
 
-    return fraction_glyc
+    return {'n_glyc': glycount, 'fraction_glyc': fraction_glyc}
 
-assert(fraction_sites_glycosylated('MAANRSCNASCNPSC') == float(2) / 15)
+assert(fraction_sites_glycosylated('MAANRSCNASCNPSC')['n_glyc'] == 2)
+assert(fraction_sites_glycosylated('MAANRSCNASCNPSC')['fraction_glyc'] == float(2) / 15)
