@@ -13,7 +13,7 @@ def main(argv):
     # Name of the reference isolate
     ref_isolate_name = str(argv[1])
 
-    # Sites to be included in divergence calculation. Either "all" or a range in the format "X-Y"
+    # Sites to be included in divergence calculation. Either "all" or a range in the format "X-Y" in natural numbering (starting from 1).
     sites = str(argv[2])
 
     # Path to alignment file

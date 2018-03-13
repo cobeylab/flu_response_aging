@@ -6,9 +6,9 @@ ha2_sites=346-566
 
 # NAH (NA head) vs. NAS (NA non-head, inc. stem and transmembrane domains) partitions
 # Within the head, sites in the enzymatic site are denoted NAA
-# Based on Air 2011
+# Based on Air 2011, head starting at conserved cysteine at position 92.
 nah_sites=92-469
-nas_sites=1-92
+nas_sites=1-91
 naa_sites=118,119,151,152,156,178,222,224,227,274,276,277,292,294,371,406,425
 
 
