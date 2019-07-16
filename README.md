@@ -1,5 +1,5 @@
 # flu_response_aging
-Collaboration with Patrick's Wilson's group, led by Carole Henry: Elderly individuals no longer adapt their B cell responses to influenza efficiently
+Collaboration with Patrick's Wilson's group, led by Carole Henry: [Influenza Virus Vaccination Elicits Poorly Adapted B Cell Responses in Elderly Individuals](https://www.sciencedirect.com/science/article/pii/S1931312819300393). 
 
 ## Lineage assignment of influenza B sequences
 Sbatch script ```blast_B_to_reference_seqs.sbatch``` contains the commands used for blasting influenza B HA  sequences in ```genbank_B_HA.fasta``` against the reference strains in ```reference_B_strains.fasta``` (both files are in ```data/sequences/```). Script ```process_blast_output.R``` processes the resulting csv file into another csv file listing the assigned lineage for each isolate (identified by its name and accession number). ```partition_B_sequences.py``` takes a fasta file with sequences   and the lineage assignment csv file produced by ```process_blast_output.R``` and outputs separate fasta files with sequences from the Yamagata and Victoria lineages. Shell script ```partition_B_sequences.sh``` executes ```partition_B_sequences.py``` for  ```genbank_B_HA.fasta```, ```genbank_B_NA.fasta``` and ```genbank_B_NP.fasta```.
